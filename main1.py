@@ -29,13 +29,11 @@ def train_model(data_file):
 
 @app.route("/train", methods=["POST"])
 def train():
-    if 'file' not in request.files:
-        return jsonify({"error": "No file uploaded"}), 400
-    file = request.files['file']
+    file_path = "classification.csv"  # Use the existing CSV file
     
-    file_path = "classification.csv"
-    file.save(file_path)
-    
+    if not os.path.exists(file_path):
+        return jsonify({"error": "File classification.csv not found"}), 400
+
     msg, status = train_model(file_path)
     return jsonify({"message": msg}), status
 
